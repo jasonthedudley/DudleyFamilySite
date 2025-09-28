@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { jwt } from 'hono/jwt'
-import { sign, verify } from 'jose'
+import { SignJWT, jwtVerify } from 'jose'
 
 const app = new Hono()
 
@@ -18,8 +18,7 @@ app.use('*', cors({
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }))
 
-// JWT secret (in production, use environment variable)
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production')
+// JWT secret will be accessed from environment
 
 // Auth middleware
 const authMiddleware = async (c, next) => {
@@ -30,7 +29,8 @@ const authMiddleware = async (c, next) => {
 
   const token = authHeader.substring(7)
   try {
-    const { payload } = await verify(token, JWT_SECRET)
+    const JWT_SECRET = new TextEncoder().encode(c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production')
+    const { payload } = await jwtVerify(token, JWT_SECRET)
     c.set('user', payload)
     await next()
   } catch (error) {
@@ -39,14 +39,15 @@ const authMiddleware = async (c, next) => {
 }
 
 // Auth routes
-app.post('/auth/login', async (c) => {
+app.post('/api/auth/login', async (c) => {
   const { password } = await c.req.json()
   
-  if (password !== process.env.FAMILY_PASSWORD) {
+  if (password !== c.env.FAMILY_PASSWORD) {
     return c.json({ error: 'Invalid password' }, 401)
   }
 
-  const token = await new sign.SignJWT({ 
+  const JWT_SECRET = new TextEncoder().encode(c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production')
+  const token = await new SignJWT({ 
     userId: 'family-member',
     name: 'Family Member',
     role: 'family'
@@ -66,12 +67,12 @@ app.post('/auth/login', async (c) => {
   })
 })
 
-app.get('/auth/verify', authMiddleware, async (c) => {
+app.get('/api/auth/verify', authMiddleware, async (c) => {
   return c.json({ user: c.get('user') })
 })
 
 // Photo routes
-app.get('/photos', authMiddleware, async (c) => {
+app.get('/api/photos', authMiddleware, async (c) => {
   try {
     const { results } = await c.env.DB.prepare(`
       SELECT * FROM photos 
@@ -84,7 +85,7 @@ app.get('/photos', authMiddleware, async (c) => {
   }
 })
 
-app.post('/photos', authMiddleware, async (c) => {
+app.post('/api/photos', authMiddleware, async (c) => {
   try {
     const formData = await c.req.formData()
     const photo = formData.get('photo')
@@ -124,7 +125,7 @@ app.post('/photos', authMiddleware, async (c) => {
 })
 
 // Event routes
-app.get('/events', authMiddleware, async (c) => {
+app.get('/api/events', authMiddleware, async (c) => {
   try {
     const { results } = await c.env.DB.prepare(`
       SELECT * FROM events 
@@ -137,7 +138,7 @@ app.get('/events', authMiddleware, async (c) => {
   }
 })
 
-app.post('/events', authMiddleware, async (c) => {
+app.post('/api/events', authMiddleware, async (c) => {
   try {
     const { title, datetime, description, type } = await c.req.json()
     
@@ -159,7 +160,7 @@ app.post('/events', authMiddleware, async (c) => {
   }
 })
 
-app.put('/events/:id', authMiddleware, async (c) => {
+app.put('/api/events/:id', authMiddleware, async (c) => {
   try {
     const id = c.req.param('id')
     const { title, datetime, description, type } = await c.req.json()
@@ -176,7 +177,7 @@ app.put('/events/:id', authMiddleware, async (c) => {
   }
 })
 
-app.delete('/events/:id', authMiddleware, async (c) => {
+app.delete('/api/events/:id', authMiddleware, async (c) => {
   try {
     const id = c.req.param('id')
     
@@ -191,7 +192,7 @@ app.delete('/events/:id', authMiddleware, async (c) => {
 })
 
 // Message routes
-app.get('/messages', authMiddleware, async (c) => {
+app.get('/api/messages', authMiddleware, async (c) => {
   try {
     const { results } = await c.env.DB.prepare(`
       SELECT * FROM messages 
@@ -204,7 +205,7 @@ app.get('/messages', authMiddleware, async (c) => {
   }
 })
 
-app.post('/messages', authMiddleware, async (c) => {
+app.post('/api/messages', authMiddleware, async (c) => {
   try {
     const { content, type, title, parentId } = await c.req.json()
     
@@ -244,7 +245,7 @@ app.post('/messages', authMiddleware, async (c) => {
   }
 })
 
-app.put('/messages/:id', authMiddleware, async (c) => {
+app.put('/api/messages/:id', authMiddleware, async (c) => {
   try {
     const id = c.req.param('id')
     const updateData = await c.req.json()
@@ -275,7 +276,7 @@ app.put('/messages/:id', authMiddleware, async (c) => {
   }
 })
 
-app.delete('/messages/:id', authMiddleware, async (c) => {
+app.delete('/api/messages/:id', authMiddleware, async (c) => {
   try {
     const id = c.req.param('id')
     

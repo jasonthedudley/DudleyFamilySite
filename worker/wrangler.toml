@@ -9,12 +9,12 @@ name = "dudley-family-api"
 [[d1_databases]]
 binding = "DB"
 database_name = "dudley-family-db"
-database_id = "your-database-id-here"
+database_id = "ba144e5e-7bd4-4e88-995d-b8ea2d261ed4"
 
-# R2 Bucket bindings
-[[r2_buckets]]
-binding = "PHOTOS_BUCKET"
-bucket_name = "dudley-family-photos"
+# R2 Bucket bindings (uncomment after creating bucket)
+# [[r2_buckets]]
+# binding = "PHOTOS_BUCKET"
+# bucket_name = "dudley-family-photos"
 
 # Environment variables
 [vars]

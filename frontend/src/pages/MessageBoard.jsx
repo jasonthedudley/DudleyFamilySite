@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../utils/api'
 
 function MessageBoard() {
   const [messages, setMessages] = useState([])
@@ -14,7 +14,7 @@ function MessageBoard() {
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get('/api/messages')
+      const response = await api.get('/api/messages')
       setMessages(response.data)
     } catch (error) {
       console.error('Failed to fetch messages:', error)
@@ -32,7 +32,7 @@ function MessageBoard() {
         parentId: replyingTo
       }
 
-      await axios.post('/api/messages', messageData)
+      await api.post('/api/messages', messageData)
       await fetchMessages()
       
       setNewMessage({ content: '', type: 'message' })
@@ -47,7 +47,7 @@ function MessageBoard() {
     if (!replyContent.trim()) return
 
     try {
-      await axios.post('/api/messages', {
+      await api.post('/api/messages', {
         content: replyContent,
         type: 'message',
         parentId: messageId
@@ -64,7 +64,7 @@ function MessageBoard() {
   const handleDelete = async (messageId) => {
     if (window.confirm('Are you sure you want to delete this message?')) {
       try {
-        await axios.delete(`/api/messages/${messageId}`)
+        await api.delete(`/api/messages/${messageId}`)
         await fetchMessages()
       } catch (error) {
         console.error('Failed to delete message:', error)
@@ -122,7 +122,7 @@ function MessageBoard() {
                         updatedItems[index].completed = !updatedItems[index].completed
                         
                         try {
-                          await axios.put(`/api/messages/${message.id}`, {
+                          await api.put(`/api/messages/${message.id}`, {
                             ...message,
                             items: updatedItems
                           })

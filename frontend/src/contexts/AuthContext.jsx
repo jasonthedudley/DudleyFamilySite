@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../utils/api'
 
 const AuthContext = createContext()
 
@@ -21,9 +21,7 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('family_token')
     if (token) {
       // Verify token with backend
-      axios.get('/api/auth/verify', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      api.get('/api/auth/verify')
       .then(response => {
         setIsAuthenticated(true)
         setUser(response.data.user)
@@ -43,7 +41,7 @@ export function AuthProvider({ children }) {
 
   const login = async (password) => {
     try {
-      const response = await axios.post('/api/auth/login', { password })
+      const response = await api.post('/api/auth/login', { password })
       const { token, user } = response.data
       
       localStorage.setItem('family_token', token)

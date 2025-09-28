@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import axios from 'axios'
+import api from '../utils/api'
 
 function Calendar() {
   const [events, setEvents] = useState([])
@@ -24,7 +24,7 @@ function Calendar() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('/api/events')
+      const response = await api.get('/api/events')
       setEvents(response.data)
     } catch (error) {
       console.error('Failed to fetch events:', error)
@@ -63,10 +63,10 @@ function Calendar() {
       }
 
       if (editingEvent) {
-        await axios.put(`/api/events/${editingEvent.id}`, eventData)
+        await api.put(`/api/events/${editingEvent.id}`, eventData)
         await fetchEvents()
       } else {
-        await axios.post('/api/events', eventData)
+        await api.post('/api/events', eventData)
         await fetchEvents()
       }
 
@@ -81,7 +81,7 @@ function Calendar() {
   const handleDelete = async (eventId) => {
     if (window.confirm('Are you sure you want to delete this event?')) {
       try {
-        await axios.delete(`/api/events/${eventId}`)
+        await api.delete(`/api/events/${eventId}`)
         await fetchEvents()
         setShowForm(false)
         setEditingEvent(null)

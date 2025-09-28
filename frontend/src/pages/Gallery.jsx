@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
+import api from '../utils/api'
 
 function Gallery() {
   const [photos, setPhotos] = useState([])
@@ -16,7 +16,7 @@ function Gallery() {
 
   const fetchPhotos = async () => {
     try {
-      const response = await axios.get('/api/photos')
+      const response = await api.get('/api/photos')
       setPhotos(response.data)
     } catch (error) {
       console.error('Failed to fetch photos:', error)
@@ -55,7 +55,7 @@ function Gallery() {
     formData.append('caption', newPhoto.caption)
 
     try {
-      const response = await axios.post('/api/photos', formData, {
+      const response = await api.post('/api/photos', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
