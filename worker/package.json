@@ -1,0 +1,19 @@
+{
+  "name": "dudley-family-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker backend for Dudley Family Site",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "echo 'No build step required for Workers'"
+  },
+  "dependencies": {
+    "hono": "^3.11.7",
+    "jose": "^5.1.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0",
+    "wrangler": "^3.19.0"
+  }
+}

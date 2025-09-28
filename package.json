@@ -1,0 +1,23 @@
+{
+  "name": "dudley-family-site",
+  "version": "1.0.0",
+  "description": "A full-stack family website with photo sharing, calendar, and message board",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "worker"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:worker\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:worker": "cd worker && npm run dev",
+    "build": "npm run build:frontend && npm run build:worker",
+    "build:frontend": "cd frontend && npm run build",
+    "build:worker": "cd worker && npm run build",
+    "deploy:worker": "cd worker && npx wrangler deploy",
+    "deploy:frontend": "cd frontend && npx wrangler pages deploy dist"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

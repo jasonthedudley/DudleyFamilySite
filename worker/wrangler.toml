@@ -1,0 +1,26 @@
+name = "dudley-family-api"
+main = "src/index.js"
+compatibility_date = "2023-12-01"
+
+[env.production]
+name = "dudley-family-api"
+
+# D1 Database bindings
+[[d1_databases]]
+binding = "DB"
+database_name = "dudley-family-db"
+database_id = "your-database-id-here"
+
+# R2 Bucket bindings
+[[r2_buckets]]
+binding = "PHOTOS_BUCKET"
+bucket_name = "dudley-family-photos"
+
+# Environment variables
+[vars]
+JWT_SECRET = "your-jwt-secret-here"
+FAMILY_PASSWORD = "dudley2024"
+
+# CORS settings
+[env.production.vars]
+CORS_ORIGIN = "https://the-dudley-family.com"
