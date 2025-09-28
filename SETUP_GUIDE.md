@@ -136,8 +136,19 @@ This will start both frontend and backend. Visit http://localhost:3000
 
 ## 🎉 You're Done!
 
-Your family website will be available at a URL like:
-`https://dudley-family-site.pages.dev`
+Your family website will be available at:
+`https://the-dudley-family.com`
+
+## 🌐 Custom Domain Setup (Optional)
+
+Since you own `the-dudley-family.com`, you can connect it to your website:
+
+1. **Add your domain** to Cloudflare (see `CUSTOM_DOMAIN_SETUP.md`)
+2. **Update nameservers** at your domain registrar
+3. **Connect domain** to your Pages project
+4. **Enjoy** your professional family website!
+
+**Note:** You can also use the default Pages URL (`https://dudley-family-site.pages.dev`) if you prefer to set up the custom domain later.
 
 ## 🔧 Troubleshooting
 

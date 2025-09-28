@@ -56,12 +56,12 @@
 - [ ] Deploy!
 
 ## 🎉 Final Check
-- [ ] Your website is live at a URL like: `https://dudley-family-site.pages.dev`
+- [ ] Your website is live at: `https://the-dudley-family.com`
 - [ ] You can log in with the family password
 - [ ] All features work (gallery, calendar, messages)
 
 ## 📝 Important URLs to Save
-- **Your website:** `https://dudley-family-site.pages.dev`
+- **Your website:** `https://the-dudley-family.com`
 - **Worker API:** `https://your-worker-url.workers.dev`
 - **Cloudflare dashboard:** https://dash.cloudflare.com/
 
